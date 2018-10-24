@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Gymio</title>
+
+  <meta name="description" content="A gym web application">
+  <meta name="author" content="Gymio">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="one-half column" style="margin-top: 15%">
+        <h4>Gymiooo</h4>
+        <p>
+          Welcome to Gymio. Please enter your user stats. If you wish to contribute to the project go to <a>https://github.com/truongio/gymio-service</a>
+        </p>
+        <label for="weight">Your weight</label>
+        <input class="u-full-width" type="text" placeholder="Over 9000!!!" id="weight">
+
+        <label for="bench">Bench Press</label>
+        <input class="u-full-width" type="text" placeholder="Over 9000!!!" id="bench">
+
+        <label for="deadlift">Deadlift</label>
+        <input class="u-full-width" type="text" placeholder="Over 9000!!!" id="deadlift">
+
+        <label for="squat">Squat</label>
+        <input class="u-full-width" type="text" placeholder="Over 9000!!!" id="squat">
+
+        <label for="overhead">Overhead Press</label>
+        <input class="u-full-width" type="text" placeholder="Over 9000!!!" id="overhead">
+        <button onclick="getStats()">Submit</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
+
+<script>
+  function getStats() {
+    let jsonny = {
+      "trainingMaxes": {
+        "BenchPress": {
+          "value": document.getElementById("bench").value || 0,
+          "unit": "kg"
+        },
+        "Squat": {
+          "value": document.getElementById("squat").value || 0,
+          "unit": "kg"
+        },
+        "Deadlift": {
+          "value": document.getElementById("deadlift").value,
+          "unit": "kg"
+        },
+        "OverheadPress": {
+          "value": document.getElementById("overhead").value,
+          "unit": "kg"
+        }
+      },
+      "bodyWeight": {
+        "value": document.getElementById("weight").value,
+        "unit": "kg"
+      }
+    }
+
+    function uuidv4() {
+      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+      )
+    }
+
+    const userId = uuidv4()
+    axios.post(`http://35.228.75.253/user-stats/${userId}`, jsonny)
+      .then(function (response) {
+        console.log(`Your user ID is ${userId}`)
+        console.log(response);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
+  }
+</script>
