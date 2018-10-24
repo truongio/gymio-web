@@ -1,4 +1,4 @@
 # Gymio Web App
 
-## Heroku URL
+### Heroku URL
 https://gymio-web.herokuapp.com/index.html
