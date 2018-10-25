@@ -131,7 +131,7 @@
       }
     }
 
-    axios.post(`https://35.228.75.253/workout/active/${currentUserId}/log`, jsonny)
+    axios.post(`https://www.gymioapp.com/workout/active/${currentUserId}/log`, jsonny)
       .then(function (response) {
         let dataI = JSON.stringify(response.data)
         document.getElementById('status').innerHTML = `Status: Logged <br><br> ${dataI}`
@@ -143,7 +143,7 @@
   }
 
   function startWorkout() {
-    axios.post(`https://35.228.75.253/workout/active/${currentUserId}/start`, {})
+    axios.post(`https://www.gymioapp.com/workout/active/${currentUserId}/start`, {})
       .then(function (response) {
         document.getElementById('status').innerHTML = `Status: Active`
         console.log(response);
@@ -154,7 +154,7 @@
   }
 
   function finishWorkout() {
-    axios.post(`https://35.228.75.253/workout/active/${currentUserId}/finish`, {})
+    axios.post(`https://www.gymioapp.com/workout/active/${currentUserId}/finish`, {})
       .then(function (response) {
         document.getElementById('status').innerHTML = `Status: Finished`
         console.log(response);
