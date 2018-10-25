@@ -109,7 +109,7 @@
 
     currentUserId = uuidv4()
 
-    axios.post(`https://35.228.75.253/user-stats/${currentUserId}`, jsonny)
+    axios.post(`https://www.gymioapp.com/user-stats/${currentUserId}`, jsonny)
       .then(function (response) {
         document.getElementById('user-id').innerHTML = `<em>User ID is ${currentUserId}</em>`
         console.log(response);
