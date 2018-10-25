@@ -45,6 +45,32 @@
         <button class="button-primary" onclick="logUserStats()">Submit</button>
         <div class="user-id" id="user-id"></div>
       </div>
+      <div class="one-half column" style="margin-top: 15%;margin-bottom:15%">
+        <h4>Workout</h4>
+        <p>
+          Fight. Fight. Fight.
+        </p>
+
+        <button class="button-primary" onclick="startWorkout()">Start workout</button>
+        <button onclick="finishWorkout()">End workout</button>
+
+        <label for="exercise">Exercise</label>
+        <select class="u-full-width" id="exercise">
+          <option value="complete-bench-press">Bench Press</option>
+          <option value="complete-deadlift">Deadlift</option>
+          <option value="complete-squat">Squat</option>
+          <option value="complete-overhead-press">Overhead Press</option>
+        </select>
+
+
+        <label for="lift">How much do you even lift?</label>
+        <input class="u-full-width" type="number" placeholder="Over 9000!!!" id="lift">
+        <label for="reps">Repetitions</label>
+        <input class="u-full-width" type="number" placeholder="Over 9000!!!" id="reps">
+
+        <button onclick="logExercise()">Loggit</button>
+        <div class="status" id="status">Status: Not started</div>
+      </div>
     </div>
   </div>
 
@@ -53,6 +79,7 @@
 </html>
 
 <script>
+  let currentUserId = ''
 
   function logUserStats() {
     let jsonny = {
@@ -80,16 +107,56 @@
       }
     }
 
-    function uuidv4() {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-      )
+    currentUserId = uuidv4()
+
+    axios.post(`http://35.228.75.253/user-stats/${currentUserId}`, jsonny)
+      .then(function (response) {
+        document.getElementById('user-id').innerHTML = `<em>User ID is ${currentUserId}</em>`
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+  }
+
+  function logExercise() {
+    const selected = document.getElementById('exercise').value
+
+    let jsonny = {
+      "eventType": resolveEventType(selected),
+      "reps": inputData('reps'),
+      "weight": {
+        "value": inputData('lift'),
+        "unit": "kg"
+      }
     }
 
-    const userId = uuidv4()
-    axios.post(`http://35.228.75.253/user-stats/${userId}`, jsonny)
+    axios.post(`http://35.228.75.253/workout/active/${currentUserId}/log`, jsonny)
       .then(function (response) {
-        document.getElementById('user-id').innerHTML = `<em>User ID is ${userId}</em>`
+        let dataI = JSON.stringify(response.data)
+        document.getElementById('status').innerHTML = `Status: Logged <br><br> ${dataI}`
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+  }
+
+  function startWorkout() {
+    axios.post(`http://35.228.75.253/workout/active/${currentUserId}/start`, {})
+      .then(function (response) {
+        document.getElementById('status').innerHTML = `Status: Active`
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+  }
+
+  function finishWorkout() {
+    axios.post(`http://35.228.75.253/workout/active/${currentUserId}/finish`, {})
+      .then(function (response) {
+        document.getElementById('status').innerHTML = `Status: Finished`
         console.log(response);
       })
       .catch(function (error) {
@@ -100,11 +167,37 @@
   function inputData(id) {
     return document.getElementById(id).value || 0
   }
+
+  function uuidv4() {
+    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    )
+  }
+
+  function resolveEventType(text) {
+    switch (text) {
+      case 'complete-bench-press':
+        return 'CompleteBenchPress'
+      case 'complete-deadlift':
+        return 'CompleteDeadlift'
+      case 'complete-squat':
+        return 'CompleteSquat'
+      case 'complete-overhead-press':
+        return 'CompleteOverheadPress'
+      default:
+        return ''
+    }
+  }
 </script>
 
 <style>
-.user-id {
-  font-size: 0.8em;
-  opacity: 0.5;
-}
+  .user-id {
+    font-size: 0.8em;
+    opacity: 0.5;
+  }
+
+  .status {
+    font-size: 0.9em;
+    opacity: 0.5;
+  }
 </style>
