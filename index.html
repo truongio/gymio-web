@@ -24,24 +24,26 @@
       <div class="one-half column" style="margin-top: 15%;margin-bottom:15%">
         <h4>Gymiooo</h4>
         <p>
-          Welcome to Gymio. Please enter your user stats. If you wish to contribute to the project go to 
+          Welcome to Gymio. Please enter your user stats.
+          If you wish to contribute to the project go to:
           <a href="https://github.com/truongio/gymio-web">https://github.com/truongio/gymio-web</a>
         </p>
         <label for="weight">Your weight</label>
-        <input class="u-full-width" type="text" placeholder="Over 9000!!!" id="weight">
+        <input class="u-full-width" type="number" placeholder="Over 9000!!!" id="weight">
 
         <label for="bench">Bench Press</label>
-        <input class="u-full-width" type="text" placeholder="Over 9000!!!" id="bench">
+        <input class="u-full-width" type="number" placeholder="Over 9000!!!" id="bench">
 
         <label for="deadlift">Deadlift</label>
-        <input class="u-full-width" type="text" placeholder="Over 9000!!!" id="deadlift">
+        <input class="u-full-width" type="number" placeholder="Over 9000!!!" id="deadlift">
 
         <label for="squat">Squat</label>
-        <input class="u-full-width" type="text" placeholder="Over 9000!!!" id="squat">
+        <input class="u-full-width" type="number" placeholder="Over 9000!!!" id="squat">
 
         <label for="overhead">Overhead Press</label>
-        <input class="u-full-width" type="text" placeholder="Over 9000!!!" id="overhead">
-        <button onclick="getStats()">Submit</button>
+        <input class="u-full-width" type="number" placeholder="Over 9000!!!" id="overhead">
+        <button onclick="logUserStats()">Submit</button>
+        <div class="user-id" id="user-id"></div>
       </div>
     </div>
   </div>
@@ -51,28 +53,29 @@
 </html>
 
 <script>
-  function getStats() {
+
+  function logUserStats() {
     let jsonny = {
       "trainingMaxes": {
         "BenchPress": {
-          "value": document.getElementById("bench").value || 0,
+          "value": inputData('bench'),
           "unit": "kg"
         },
         "Squat": {
-          "value": document.getElementById("squat").value || 0,
+          "value": inputData('squat'),
           "unit": "kg"
         },
         "Deadlift": {
-          "value": document.getElementById("deadlift").value,
+          "value": inputData('deadlift'),
           "unit": "kg"
         },
         "OverheadPress": {
-          "value": document.getElementById("overhead").value,
+          "value": inputData('overhead'),
           "unit": "kg"
         }
       },
       "bodyWeight": {
-        "value": document.getElementById("weight").value,
+        "value": inputData('weight'),
         "unit": "kg"
       }
     }
@@ -86,15 +89,22 @@
     const userId = uuidv4()
     axios.post(`http://35.228.75.253/user-stats/${userId}`, jsonny)
       .then(function (response) {
-        console.log(`Your user ID is ${userId}`)
+        document.getElementById('user-id').innerHTML = `<em>User ID is ${userId}</em>`
         console.log(response);
       })
       .catch(function (error) {
-        // handle error
         console.log(error);
       })
-      .then(function () {
-        // always executed
-      });
+  }
+
+  function inputData(id) {
+    return document.getElementById(id).value || 0
   }
 </script>
+
+<style>
+.user-id {
+  font-size: 0.8em;
+  opacity: 0.5;
+}
+</style>
