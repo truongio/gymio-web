@@ -80,6 +80,7 @@
 
 <script>
   let currentUserId = ''
+  const rootUrl = 'https://api.gymioapp.com'
 
   function logUserStats() {
     let jsonny = {
@@ -109,7 +110,7 @@
 
     currentUserId = uuidv4()
 
-    axios.post(`https://www.gymioapp.com/user-stats/${currentUserId}`, jsonny)
+    axios.post(`${rootUrl}/user-stats/${currentUserId}`, jsonny)
       .then(function (response) {
         document.getElementById('user-id').innerHTML = `<em>User ID is ${currentUserId}</em>`
         console.log(response);
@@ -131,7 +132,7 @@
       }
     }
 
-    axios.post(`https://www.gymioapp.com/workout/active/${currentUserId}/log`, jsonny)
+    axios.post(`${rootUrl}/workout/active/${currentUserId}/log`, jsonny)
       .then(function (response) {
         let dataI = JSON.stringify(response.data)
         document.getElementById('status').innerHTML = `Status: Logged <br><br> ${dataI}`
@@ -143,7 +144,7 @@
   }
 
   function startWorkout() {
-    axios.post(`https://www.gymioapp.com/workout/active/${currentUserId}/start`, {})
+    axios.post(`${rootUrl}/workout/active/${currentUserId}/start`, {})
       .then(function (response) {
         document.getElementById('status').innerHTML = `Status: Active`
         console.log(response);
@@ -154,7 +155,7 @@
   }
 
   function finishWorkout() {
-    axios.post(`https://www.gymioapp.com/workout/active/${currentUserId}/finish`, {})
+    axios.post(`${rootUrl}/workout/active/${currentUserId}/finish`, {})
       .then(function (response) {
         document.getElementById('status').innerHTML = `Status: Finished`
         console.log(response);
