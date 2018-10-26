@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="css/skeleton.css">
   <link rel="icon" type="image/png" href="images/favicon.png">
 
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="js/axios.min.js"></script>
 </head>
 
 <body>
@@ -28,6 +28,9 @@
           If you wish to contribute to the project go to:
           <a href="https://github.com/truongio/gymio-web">https://github.com/truongio/gymio-web</a>
         </p>
+
+        <div id="user-id">Click generate to get a user ID</div>
+
         <label for="weight">Your weight</label>
         <input class="u-full-width" type="number" placeholder="Over 9000!!!" id="weight">
 
@@ -42,8 +45,8 @@
 
         <label for="overhead">Overhead Press</label>
         <input class="u-full-width" type="number" placeholder="Over 9000!!!" id="overhead">
+        <button class="button-primary" onclick="generateUserId()">Generate</button>
         <button class="button-primary" onclick="logUserStats()">Submit</button>
-        <div class="user-id" id="user-id"></div>
       </div>
       <div class="one-half column" style="margin-top: 15%;margin-bottom:15%">
         <h4>Workout</h4>
@@ -112,7 +115,6 @@
 
     axios.post(`${rootUrl}/user-stats/${currentUserId}`, jsonny)
       .then(function (response) {
-        document.getElementById('user-id').innerHTML = `<em>User ID is ${currentUserId}</em>`
         console.log(response);
       })
       .catch(function (error) {
@@ -163,6 +165,11 @@
       .catch(function (error) {
         console.log(error);
       })
+  }
+
+  function generateUserId() {
+    currentUserId = uuidv4()
+    document.getElementById('user-id').innerHTML = currentUserId
   }
 
   function inputData(id) {
